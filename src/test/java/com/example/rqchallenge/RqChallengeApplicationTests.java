@@ -81,7 +81,7 @@ public class RqChallengeApplicationTests {
 
     //@Test
     void shouldSearchEmployee() throws Exception {
-        String result = mockMvc.perform(get("/search/{searchString}", "test name")).andExpect(status().isOk())
+        String result = mockMvc.perform(get("/search/{searchString}", "Michael")).andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString();
         List<CreateEmployeeRequest> employees = objectMapper.readValue(result, List.class);
         assertNotNull(employees);
