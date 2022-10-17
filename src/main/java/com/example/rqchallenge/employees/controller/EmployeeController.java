@@ -46,7 +46,7 @@ public class EmployeeController implements IEmployeeController {
             ResponseEntity<ApiResponseEmployeeList> response
                     = restTemplate.getForEntity(Constants.URL+Constants.API_VERSION+Constants.EMPLOYEES, ApiResponseEmployeeList.class);
             List<Employee> employees = response.getBody().getData().stream()
-                    .filter(e -> e.getEmployeeName().equals(searchString))
+                    .filter(e -> e.getEmployeeName().contains(searchString))
                     .toList();
             return ResponseEntity.ok(employees);
         }catch (Exception e) {
@@ -88,14 +88,10 @@ public class EmployeeController implements IEmployeeController {
                     = restTemplate.getForEntity(Constants.URL+Constants.API_VERSION+Constants.EMPLOYEES, ApiResponseEmployeeList.class);
             List<String> employeeNames = response.getBody().getData().stream()
                     .sorted((e1, e2) -> (e2.getEmployeeSalary()) - e1.getEmployeeSalary())
-                    .map(e -> e.getEmployeeName() + " - " + e.getEmployeeSalary())
+                    .map(e -> e.getEmployeeName())
                     .collect(Collectors.toList());
             employeeNames.subList(10, employeeNames.size()).clear();
-            if(employeeNames!= null) {
-                return ResponseEntity.ok(employeeNames);
-            } else {
-                throw new RuntimeException();
-            }
+            return ResponseEntity.ok(employeeNames);
         } catch (RestClientException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -109,11 +105,7 @@ public class EmployeeController implements IEmployeeController {
             ResponseEntity<ApiResponseEmployee> response
                     = restTemplate.postForEntity(Constants.URL+Constants.API_VERSION+Constants.CREATE_EMPLOYEE, CreateEmployeeRequest.class, ApiResponseEmployee.class);
             System.out.println("API Response for CREATE : " + response);
-            if(response!= null) {
-                return ResponseEntity.ok(response.getBody().getData());
-            } else {
-                throw new RuntimeException();
-            }
+            return ResponseEntity.ok(response.getBody().getData());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -122,7 +114,6 @@ public class EmployeeController implements IEmployeeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteEmployeeById(@PathVariable String id) {
         try {
-            System.out.println("DELETE : " + Constants.URL+Constants.API_VERSION+Constants.DELETE_EMPLOYEE+Constants.SLASH+ id);
             restTemplate.delete(Constants.URL+Constants.API_VERSION+Constants.DELETE_EMPLOYEE+Constants.SLASH+ id);
             return ResponseEntity.ok("Employee deleted successfully");
         }catch (Exception e) {
