@@ -58,8 +58,8 @@ public class RqChallengeApplicationTests {
         createEmployeeRequest.setAge(32);
         createEmployeeRequest.setName("test name");
         createEmployeeRequest.setSalary(50000);
-        mockMvc.perform(get("/employee/{id}", 8489)).andExpect(status().isOk())
-                .andExpect(jsonPath("$.status").value("success"))
+        mockMvc.perform(get("/employee/{id}", 8489))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
