@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -41,6 +42,22 @@ public class RqChallengeApplicationTests {
     private ObjectMapper objectMapper;
 
     @Test
+    void shouldGetTopTenEmployees() throws Exception {
+        String result = mockMvc.perform(get(Constants.TOP_TEN_HIGHEST_EARNING_EMPLOYEE_NAMES)).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        List<String> topTenEmployees = objectMapper.readValue(result, List.class);
+        assertEquals(10, topTenEmployees.size());
+    }
+
+    @Test
+    void shouldGetAllEmployees() throws Exception {
+        String result = mockMvc.perform(get(Constants.EMPLOYEES)).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        List<String> allEmployees = objectMapper.readValue(result, List.class);
+        assertNotNull(allEmployees);
+    }
+
+    @Test
     void shouldCreateEmployee() throws Exception {
         CreateEmployeeRequest createEmployeeRequest = new CreateEmployeeRequest();
         createEmployeeRequest.setAge(32);
@@ -51,23 +68,6 @@ public class RqChallengeApplicationTests {
                         .content(objectMapper.writeValueAsString(createEmployeeRequest)))
                 .andExpect(status().isOk())
                 .andDo(print());
-/*
-
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post(
-                Constants.EMPLOYEE).accept(
-                MediaType.APPLICATION_JSON);
-
-        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
-
-        System.out.println(result.getResponse());
-        String expected = "{\"id\":\"Course1\",\"name\":\"Spring\",\"description\":\"10 Steps\"}";
-
-
-        // {"id":"Course1","name":"Spring","description":"10 Steps, 25 Examples and 10K Students","steps":["Learn Maven","Import Project","First Example","Second Example"]}
-
-        JSONAssert.assertEquals(expected, result.getResponse()
-                .getContentAsString(), false);
-*/
     }
 
     @Test
@@ -84,11 +84,5 @@ public class RqChallengeApplicationTests {
                 .andDo(print());
     }
 
-    @Test
-    void shouldGetTopTenEmployees() throws Exception {
-        String result = mockMvc.perform(get(Constants.TOP_TEN_HIGHEST_EARNING_EMPLOYEE_NAMES)).andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
-        List<String> topTenEmployees = objectMapper.readValue(result, List.class);
-        assertEquals(10, topTenEmployees.size());
-    }
+
 }

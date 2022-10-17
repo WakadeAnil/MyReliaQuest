@@ -56,11 +56,15 @@ public class EmployeeController implements IEmployeeController {
 
     @GetMapping(Constants.EMPLOYEE_BY_ID)
     public ResponseEntity<Employee> getEmployeeById(@PathVariable String id) {
-        ResponseEntity<ApiResponseEmployee> response
-                = restTemplate.getForEntity(Constants.URL+Constants.API_VERSION+Constants.EMPLOYEE+Constants.SLASH+
-                id, ApiResponseEmployee.class);
-        Employee employee = response.getBody().getData();
-        return ResponseEntity.ok(employee);
+        try {
+            ResponseEntity<ApiResponseEmployee> response
+                    = restTemplate.getForEntity(Constants.URL+Constants.API_VERSION+Constants.EMPLOYEE+Constants.SLASH+
+                    id, ApiResponseEmployee.class);
+            Employee employee = response.getBody().getData();
+            return ResponseEntity.ok(employee);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping(Constants.HIGHEST_SALARY)
@@ -71,11 +75,7 @@ public class EmployeeController implements IEmployeeController {
             Employee employee = response.getBody().getData().stream()
                     .max((e1, e2) -> (e1.getEmployeeSalary()) - e2.getEmployeeSalary())
                     .get();
-            if(employee!= null) {
-                return ResponseEntity.ok(employee.getEmployeeSalary());
-            } else {
-                throw new Exception();
-            }
+            return ResponseEntity.ok(employee.getEmployeeSalary());
         }catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Integer.MIN_VALUE);
         }
