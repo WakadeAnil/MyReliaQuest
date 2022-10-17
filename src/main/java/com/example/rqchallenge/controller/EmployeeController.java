@@ -1,10 +1,10 @@
-package com.example.rqchallenge.employees.controller;
+package com.example.rqchallenge.controller;
 
-import com.example.rqchallenge.employees.common.Constants;
-import com.example.rqchallenge.employees.model.ApiResponseEmployee;
-import com.example.rqchallenge.employees.model.ApiResponseEmployeeList;
-import com.example.rqchallenge.employees.model.CreateEmployeeRequest;
-import com.example.rqchallenge.employees.model.Employee;
+import com.example.rqchallenge.common.Constants;
+import com.example.rqchallenge.model.ApiResponseEmployee;
+import com.example.rqchallenge.model.ApiResponseEmployeeList;
+import com.example.rqchallenge.model.CreateEmployeeRequest;
+import com.example.rqchallenge.model.Employee;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,7 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.rqchallenge.employees.IEmployeeController;
+import com.example.rqchallenge.IEmployeeController;
 
 import java.io.IOException;
 import java.util.List;

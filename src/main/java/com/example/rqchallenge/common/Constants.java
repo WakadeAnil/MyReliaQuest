@@ -1,4 +1,4 @@
-package com.example.rqchallenge.employees.common;
+package com.example.rqchallenge.common;
 
 import org.springframework.stereotype.Service;
 
